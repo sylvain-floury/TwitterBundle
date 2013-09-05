@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/bundles/flosytwitter/css/main.css" />
+    <link rel="stylesheet" href="/bundles/flosytwitter/css/bootstrap.min.css" />
+{% endblock %}
+
+{% block body %}
+<section>
+    <h2>Tech</h2>
+    {% for tweet in list %}
+        <article>
+            <img src="{{ tweet.user.profile_image_url }}" alt="{{ tweet.user.name }}" />
+            <a href="{{ path("twitter_favorite", {twitterId: tweet.id}) }}"><i class="icon-star-empty"></i></a>
+            {{ tweet.text|twitter_url|raw }}
+            
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

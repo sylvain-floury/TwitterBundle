@@ -1,0 +1,25 @@
+{
+    "name": "flosy/twitter-bundle",
+    "description": "Twitter Bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sylvain Floury",
+            "email": "sylvain@floury.name",
+            "homepage": "http://www.flosy.info",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.8",
+        "symfony/framework-bundle":         "~2.3",
+        "twig/twig":                        "*",
+        "doctrine/doctrine-bundle":         "*",
+        "endroid/twitter-bundle":           "1.*@dev"
+    },
+    "autoload": {
+        "psr-0": { "Flosy\\Bundle\\TwitterBundle": "" }
+    },
+    "target-dir": "Flosy/Bundle/TwitterBundle"
+}
