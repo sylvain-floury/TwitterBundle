@@ -5,12 +5,12 @@ namespace Flosy\Bundle\TwitterBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/twitter")
+     * @Route("/twitter.{_format}", defaults={"_format"="html"})
      * @Template()
      */
     public function indexAction()
@@ -26,8 +26,19 @@ class DefaultController extends Controller
         
         $response = $twitter->query('lists/statuses', 'GET', 'json', $parameters);
         
-        return array('list' => json_decode($response->getContent()));
+        // Handle JSON format.
+        if($this->getRequest()->getRequestFormat() === 'json')
+        {
+            $jsonResponse = new Response($response->getContent());
+            $jsonResponse->headers->set('Content-Type', 'application/json; charset=utf-8');
+            return $jsonResponse;
+        }
+        
+        return array(
+            'list' => json_decode($response->getContent()),
+            );
     }
+    
     
     /**
      * @Route("/twitter/{twitterId}/add-to-favorite", name="twitter_favorite")
