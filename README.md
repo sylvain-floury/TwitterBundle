@@ -3,6 +3,8 @@ TwitterBundle
 
 ## Installation
 
+### From GitHub
+
 Clone the Bundle.
 
 
