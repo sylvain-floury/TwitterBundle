@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Flosy\Bundle\TwitterBundle\Form\TweetType;
+use Flosy\Bundle\TwitterBundle\Entity\Tweet;
 
 class DefaultController extends Controller
 {
@@ -39,6 +41,66 @@ class DefaultController extends Controller
             );
     }
     
+    /**
+     * @Route("/twitter/{idStr}/show")
+     * @Template("FlosyTwitterBundle:Default:show.html.twig")
+     */
+    public function showAction($idStr)
+    {
+        $twitter = $this->get('endroid.twitter');
+        
+        $parameters = array(
+            'id'    => $idStr
+            );
+        
+        $response = $twitter->query('statuses/show', 'GET', 'json', $parameters);
+        
+        return array('tweet' => json_decode($response->getContent()));
+    }
+    
+    /**
+     * @Route("/twitter/new")
+     * @Template()
+     */
+    public function newAction()
+    {
+        $tweet = new Tweet();
+        $form = $this->createForm(new TweetType(), $tweet);
+        
+        return array('form' => $form->createView());
+    }
+    
+    /**
+     * @Route("/twitter/create")
+     * @Template()
+     */
+    public function createAction()
+    {
+        $twitter = $this->get('endroid.twitter');
+        $tweet = $this->getRequest()->get('tweet');
+        
+        $parameters = array(
+            //'status' => $tweet['text'],
+            'in_reply_to_status_id' => $tweet['responseId'],
+        );
+        
+        $response = $twitter->query('statuses/update', 'POST', 'json', $parameters);
+        //$response->getStatusCode() HTTP status-code.
+        return array('tweet' => json_decode($response->getContent()));
+    }
+    
+    /**
+     * @Route("/twitter/mentions")
+     * @Template()
+     */
+    public function mentionsAction() 
+    {
+        $twitter = $this->get('endroid.twitter');
+        
+        $response = $twitter->query('statuses/mentions_timeline', 'GET', 'json');
+        
+        return array('mentions' => json_decode($response->getContent()));
+    }
     
     /**
      * @Route("/twitter/{twitterId}/add-to-favorite", name="twitter_favorite")

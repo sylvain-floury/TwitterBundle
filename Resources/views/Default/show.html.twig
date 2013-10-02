@@ -1,0 +1,8 @@
+{# dump(tweet) #}
+<div>
+    <dl>
+        <dt>id</dt> <dd>{{ tweet.id_str }}</dd>
+        <dt>id</dt> <dd>{{ tweet.text }}</dd>
+        <dt>entities</dt> <dd>{{ dump(tweet.entities) }}</dd>
+    </dl>
+</div>
